@@ -1,118 +1,130 @@
 # Campus Course & Records Manager (CCRM)
 
-## Project Overview & How to Run
-The *Campus Course & Records Manager (CCRM)* is a comprehensive, console-based Java application designed to manage student and course records for an educational institution.  
+A console-based Java application for managing student and course records at an educational institution — built as a course project applying core Java, OOP, and file I/O concepts.
 
-It provides administrators with a simple and efficient way to:
-* Handle student enrollments  
-* Track academic progress  
-* Manage course offerings  
-* Generate essential reports  
+## Overview
 
-The application is built with a focus on *clean architecture, separating **data, **business logic, and **user interface* concerns.  
+CCRM lets an administrator manage students, courses, enrollments, and grades entirely from the command line, with data persisted to CSV files and backup support.
 
-> The project requires *JDK 17* or higher to compile and run.
+## Features
+
+- **Student Management** — add, update, and view student records
+- **Course Management** — create and manage course offerings, assign instructors and semesters
+- **Enrollment & Grading** — enroll students in courses with validation (duplicate-enrollment and max-credit-limit checks), record grades, and generate transcripts
+- **Data Import/Export & Backup** — load/save student, course, and enrollment data via CSV; back up application data
+
+## Technologies Used
+
+- **Java 17** (JDK)
+- Core Java: OOP (inheritance, polymorphism), Collections Framework, custom exceptions
+- CSV-based file I/O for persistence
+- Console-based CLI (no external frameworks)
+
+## Project Structure
+- CCRM-main/
+  - bin/ - Compiled .class files
+  - data/ - CSV data (students, courses, enrollments)
+  - src/edu/ccrm/
+    - cli/ - MainMenu (console UI)
+    - config/ - AppConfig
+    - domain/ - Person, Student, Instructor, Course, Enrollment, Grade, Semester
+    - exceptions/ - DuplicateEnrollmentException, MaxCreditLimitExceededException
+    - io/ - ImportExportService, BackupService
+    - service/ - StudentService, CourseService, EnrollmentService, TranscriptService
+    - util/ - Validators, Comparators, RecursionUtils
+  - README.md
+
+
+## Steps to Install & Run
+
+**Prerequisite:** JDK 17 or higher.
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/diyasharma22/CCRM-main.git
+cd CCRM-main/src
+
+# 2. Compile
+javac -d ../bin $(find . -name "*.java")
+
+# 3. Run
+cd ../bin
+java App
+```
+
+To run with assertions enabled:
+```bash
+java -ea App
+```
+
+## Instructions for Testing
+
+1. Launch the application (`java App` from the `bin` directory).
+2. Use the console menu to:
+   - Add a new student and a new course
+   - Enroll the student in the course — try enrolling the same student twice to confirm `DuplicateEnrollmentException` is handled
+   - Enroll a student past the credit limit to confirm `MaxCreditLimitExceededException` is handled
+   - Record a grade and generate a transcript for the student
+   - Export data to CSV and confirm the files appear under `data/`
+
+## Screenshots
+
+### Main Menu
+![Main Menu](screenshots/main-menu.png)
+
+### Student Management
+![Student Management](screenshots/student-menu.png)
+
+### Adding a Student
+![Adding a Student](screenshots/add-student.png)
+
+### Course Management
+![Course Management](screenshots/course-menu.png)
+
+### Listing All Courses
+![Listing Courses](screenshots/list-courses.png)
+
+### Enrollment Menu
+![Enrollment Menu](screenshots/enrollment-menu.png)
+
+### Enrolling a Student in a Course
+![Enrolling a Student](screenshots/enroll-student.png)
+
+### Duplicate Enrollment Error Handling
+![Duplicate Enrollment Error](screenshots/duplicate-error.png)
+
+### Student Transcript
+![Student Transcript](screenshots/transcript.png)
+
 
 ---
 
-## Compile the Project
-Navigate to the project's src directory and use the javac command:
+## Java Background
 
-bash
-cd path/to/CCRM/src
-javac App.java
-Run the Application
-From the src directory, use the java command, specifying the compiled class files' location:
+**Evolution of Java**
+- 1995 — Released by Sun Microsystems.
+- 2004 — Java 5 introduced generics, annotations, and autoboxing.
+- 2014 — Java 8 introduced lambda expressions and the Streams API.
+- Present — Java 17 is the current Long-Term Support (LTS) release.
 
-java -cp ../bin App
+**Java Editions**
+- **Java SE** — core platform for desktop, server, and console apps.
+- **Java EE** — superset of SE for large-scale, distributed, enterprise apps.
+- **Java ME** — subset for resource-constrained/embedded environments.
 
+**JDK vs JRE vs JVM**
+- **JVM** — runs Java bytecode; makes Java "write once, run anywhere."
+- **JRE** — JVM + core libraries, for running Java programs.
+- **JDK** — JRE + development tools (`javac`, debugger); required to build this project.
 
-## Evolution of Java
-1995: Released by Sun Microsystems as an object-oriented language for consumer electronics.
+## Syllabus-to-Code Mapping
 
-2004: The release of Java 5 introduced generics, annotations, and autoboxing, significantly modernizing the language.
+| Syllabus Topic | Where It's Demonstrated |
+|---|---|
+| Object-Oriented Programming (OOP) | `edu.ccrm.domain` package (`Person`, `Student`, `Instructor`, `Course`, `Enrollment`) |
+| Data Persistence & File I/O | `edu.ccrm.io` package (`ImportExportService`, `BackupService`) |
+| Collection Framework | `edu.ccrm.service` package (e.g. `StudentService` using `List<Student>`) |
+| Exception Handling | `edu.ccrm.exceptions` (`DuplicateEnrollmentException`, `MaxCreditLimitExceededException`) |
+| Inheritance & Polymorphism | `Person` base class extended by `Student` and `Instructor` |
+| Console-based I/O | `edu.ccrm.cli.MainMenu` |
 
-2014: Java 8 was a major release, introducing lambda expressions and the Streams API, which are essential for modern functional programming in Java.
-
-Present: Java continues to evolve with a faster release cadence, with Java 17 being the latest Long-Term Support (LTS) version.
-
-## Java Editions: ME, SE, and EE
-Java SE (Standard Edition): The core platform for general-purpose desktop, server, and console applications. This is the foundation for all other editions.
-
-Java EE (Enterprise Edition): A superset of Java SE, providing APIs for developing large-scale, distributed, and multi-tiered applications, such as web services and enterprise applications.
-
-Java ME (Micro Edition): A subset of Java SE, designed for resource-constrained environments like embedded systems and older mobile phones.
-
-JDK, JRE, and JVM Explained
-JVM (Java Virtual Machine): The core of the Java platform. It's an abstract machine that provides a runtime environment for executing Java bytecode. The JVM is what makes Java write once, run anywhere.
-
-JRE (Java Runtime Environment): Includes the JVM, plus the core libraries and other files needed to run a Java application. If you only want to run Java programs, you need the JRE.
-
-JDK (Java Development Kit): Includes the JRE, plus the development tools needed to create Java applications, such as the compiler (javac), debugger, and archiver. The JDK is required to compile this project.
-
-Setting up the Development Environment
-JDK Installation on Windows
-Download the JDK: Download the latest JDK installer from the official Oracle website.
-
-## Run the Installer: Run the .exe file. The installer guides you through the process of installing the JDK to a default location like:
-
-
-C:\Program Files\Java\jdk-17
-Set Environment Variables:
-
-Create a new system variable named JAVA_HOME and set its value to your JDK installation path (e.g., C:\Program Files\Java\jdk-17).
-
-Edit the Path system variable, and add %JAVA_HOME%\bin to it. This allows you to run java and javac from any directory in the command prompt.
-
-VS Code Setup
-Install Extensions:
-Install the official Java Extension Pack from the VS Code Marketplace. It includes:
-
-Language Support for Java (by Red Hat)
-
-Debugger for Java
-
-Java Test Runner
-
-Maven/Gradle support
-
-Open the Project:
-Open VS Code → File > Open Folder... → Select the CCRM root directory.
-
-Configure JDK:
-Go to File > Preferences > Settings and search for Java: Home.
-Set it to your JDK installation path (e.g., C:\Program Files\Java\jdk-17).
-
-Set Main Class & Run:
-
-Open App.java.
-
-Click Run > Start Debugging (F5).
-
-Ensure the main class is set to:
-
-
-edu.ccrm.App
-VS Code will launch the application in the integrated terminal.
-
-Syllabus to Code Mapping
-This table maps key academic topics to where they are practically demonstrated in the project's codebase.
-
-Syllabus Topic	File/Class/Method Where It's Demonstrated
-Object-Oriented Programming (OOP)	edu.ccrm.domain package (e.g., Student.java, Course.java, Enrollment.java)
-Data Persistence & File I/O	edu.ccrm.io package (e.g., CSVLoader.java, CSVWriter.java)
-Collection Framework	edu.ccrm.service package (e.g., StudentService.java using List<Student>)
-Exception Handling	Various classes, particularly in edu.ccrm.io (file errors) or in edu.ccrm.service (student not found)
-Inheritance & Polymorphism	The Person base class (if implemented) or shared methods between data models
-Console-based I/O	edu.ccrm.cli package (e.g., CLIHandler.java, Menu.java)
-Export to Sheets	Note: Details for exporting to sheets are not provided in the input. Please clarify if you need specific instructions for this feature.
-
-Enabling Assertions
-To ensure certain conditions hold true during development and testing, this project uses assertions. They are disabled by default.
-
-To enable them when running the application, use the -ea (enable assertions) flag:
-
-bash
-
-java -ea -cp ../bin App
-pgsql
